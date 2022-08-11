@@ -32,5 +32,5 @@ app.get('/about-us',(req,res)=>{
 })
 
 app.use((req,res)=>{
-    res.status(404).render('404');
+    res.status(404).render('404',{title:'404 Error Loading Page'});
 })
