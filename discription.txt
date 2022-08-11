@@ -1,1 +1,7 @@
 this is a single node js application
+
+
+cmd : 
+1) npm install express
+2) npm install ejs
+3) npm install morgan
