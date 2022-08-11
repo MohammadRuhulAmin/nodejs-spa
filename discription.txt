@@ -5,3 +5,4 @@ cmd :
 1) npm install express
 2) npm install ejs
 3) npm install morgan
+4) npm install mongoose

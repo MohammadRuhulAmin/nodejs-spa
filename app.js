@@ -1,15 +1,24 @@
 const express = require('express')
 const morgan = require('morgan')
+const mongoose = require('mongoose')
+
 
 const app = express();
 const port = 3000;
-app.listen(port,'localhost',()=>{
-    console.log(`server is listening at port : ${port}`)
-})
+// app.listen(port,'localhost',()=>{
+//     console.log(`server is listening at port : ${port}`)
+// })
 app.set('view engine','ejs')
-
+const dbURI = 'mongodb+srv://ruhulamin_1995:ruhulamin25144747@cluster0.uyd5si2.mongodb.net/Cluster0?retryWrites=true&w=majority';
+mongoose.connect(dbURI)
+        .then((result)=>{
+            app.listen(port,'localhost',()=>{
+                console.log(`server is listening at port : ${port}`)
+                console.log('Connection has been established successfully!')
+            })
+        })
+        .catch((error)=>console.log('disconnected from database'))
 //app.use(morgan('dev'));
-
 // app.use((req,res,next)=>{
 //     console.log('New Request Made : ')
 //     console.log('Host :', req.hostname)
