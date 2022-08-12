@@ -59,11 +59,23 @@ app.get('/blogs',(req,res)=>{
         })
 })
 
+app.delete('/blogs/:id',(req,res)=>{
+    const id = req.params.id 
+    Blog.findByIdAndDelete(id)
+        .then((result)=>{
+            res.json({redirect:'/blogs'})
+        })
+        .catch((error)=>{
+            console.log(error)
+        })
+})
+
 app.get('/blogs/:id',(req,res)=>{
     const id = req.params.id
-    console.log(id) 
+    console.log(id)
     Blog.findById(id)
         .then((result)=>{
+            console.log(result)
             res.render('details',{blog:result,title:'Blog Details'})
         })
         .catch((err)=>{
