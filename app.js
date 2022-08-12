@@ -5,11 +5,13 @@ const Blog = require('./models/blog')
 
 const app = express();
 const port = 3000;
+app.use(express.static('public')) // it will give the permission to use a folder //
 // app.listen(port,'localhost',()=>{
 //     console.log(`server is listening at port : ${port}`)
 // })
 //mongodb+srv://<username>:<password>@cluster0.uyd5si2.mongodb.net/?retryWrites=true&w=majority
 app.set('view engine','ejs')
+app.use(express.urlencoded({extended:true}));
 //const dbURI = 'mongodb+srv://ruhulamin_1995:ruhulamin25144747@cluster0.uyd5si2.mongodb.net/Cluster0?retryWrites=true&w=majority';
 const dbURI_2 = 'mongodb+srv://ruhulamin_1995:ruhulamin25144747@cluster0.uyd5si2.mongodb.net/Cluster0?retryWrites=true&w=majority'
 mongoose.connect(dbURI_2)
@@ -33,6 +35,9 @@ mongoose.connect(dbURI_2)
 //     console.log("This is a custom middleware...")
 //     next()
 // })
+app.get('/blogs/create',(req,res)=>{
+    res.render('create',{title:'create'})
+})
 app.get('/',(req,res)=>{
     // const blogs = [
     //     {title:'First Title',snippet:'first title snippet'},
@@ -54,7 +59,30 @@ app.get('/blogs',(req,res)=>{
         })
 })
 
-app.use(express.static('public')) // it will give the permission to use a folder //
+app.get('/blogs/:id',(req,res)=>{
+    const id = req.params.id
+    console.log(id) 
+    Blog.findById(id)
+        .then((result)=>{
+            res.render('details',{blog:result,title:'Blog Details'})
+        })
+        .catch((err)=>{
+            console.log(error)
+        })
+})
+
+app.post('/blogs',(req,res)=>{
+    //console.log(req.body);
+    const blog = new Blog(req.body)
+    blog.save()
+        .then((result)=>{
+            res.redirect('/blogs')
+        })
+        .catch((error)=>{
+            console.log(error) 
+        })
+})
+
 
 app.get('/about',(req,res)=>{
     const about =[
@@ -62,48 +90,46 @@ app.get('/about',(req,res)=>{
     ]
     res.render('about',{title:'about',about})
 })
-app.get('/blogs/create',(req,res)=>{
-    res.render('create',{title:'create'});
-})
+
+
 app.get('/about-us',(req,res)=>{
     res.redirect('/about',{title:'about'})
 })
+// app.get('/add-blog',(req,res)=>{
+//     const blog = new Blog({
+//         title:'My Blog',
+//         snippet:'This is my new Blog',
+//         body:'The Blog is Awesome !'
+//     })
+//     blog.save()
+//         .then((result)=>{
+//             res.send(result)
+//         })
+//         .catch((error)=>{
+//             console.log(error)
+//         })
+// })
 
-app.get('/add-blog',(req,res)=>{
-    const blog = new Blog({
-        title:'My Blog',
-        snippet:'This is my new Blog',
-        body:'The Blog is Awesome !'
-    })
-    blog.save()
-        .then((result)=>{
-            res.send(result)
-        })
-        .catch((error)=>{
-            console.log(error)
-        })
-})
-
-app.get('/single-blog',(req,res)=>{
-    Blog.findById('62f6337073422de2b6b226c4')
-        .then((result)=>{
-            res.send(result)
-        })
-        .catch((err)=>{
-            console.log(err)
-        })
-})
+// app.get('/single-blog',(req,res)=>{
+//     Blog.findById('62f6337073422de2b6b226c4')
+//         .then((result)=>{
+//             res.send(result)
+//         })
+//         .catch((err)=>{
+//             console.log(err)
+//         })
+// })
 
 
-app.get('/all-blogs',(req,res)=>{
-    Blog.find()
-        .then((result)=>{
-            res.send(result)
-        })
-        .catch((error)=>{
-            console.log(error)
-        })
-})
+// app.get('/all-blogs',(req,res)=>{
+//     Blog.find()
+//         .then((result)=>{
+//             res.send(result)
+//         })
+//         .catch((error)=>{
+//             console.log(error)
+//         })
+// })
 
 // this is a middleware ! 
 app.use((req,res)=>{
