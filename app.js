@@ -1,7 +1,8 @@
 const express = require('express')
 const morgan = require('morgan')
 const mongoose = require('mongoose')
-const Blog = require('./models/blog')
+const blogRoutes  = require('./routes/blogRoutes')
+
 
 const app = express();
 const port = 3000;
@@ -22,22 +23,13 @@ mongoose.connect(dbURI_2)
             })
         })
         .catch((error)=>console.log('disconnected from database'))
-//app.use(morgan('dev'));
-// app.use((req,res,next)=>{
-//     console.log('New Request Made : ')
-//     console.log('Host :', req.hostname)
-//     console.log('Path : ',req.path)
-//     console.log('Method: ',req.method)
-//     next()
-// });
-
-// app.use((req,res,next)=>{
-//     console.log("This is a custom middleware...")
-//     next()
-// })
-app.get('/blogs/create',(req,res)=>{
-    res.render('create',{title:'create'})
+app.get('/about',(req,res)=>{
+    const about =[
+        {description:"Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum."},
+    ]
+    res.render('about',{title:'about',about})
 })
+
 app.get('/',(req,res)=>{
     // const blogs = [
     //     {title:'First Title',snippet:'first title snippet'},
@@ -49,101 +41,14 @@ app.get('/',(req,res)=>{
     res.redirect('/blogs')
 })
 
-app.get('/blogs',(req,res)=>{
-    Blog.find()
-        .then((result)=>{
-            res.render('index',{title:'All Blogs',blogs:result})
-        })
-        .catch((error)=>{
-            console.log(error)
-        })
-})
-
-app.delete('/blogs/:id',(req,res)=>{
-    const id = req.params.id 
-    Blog.findByIdAndDelete(id)
-        .then((result)=>{
-            res.json({redirect:'/blogs'})
-        })
-        .catch((error)=>{
-            console.log(error)
-        })
-})
-
-app.get('/blogs/:id',(req,res)=>{
-    const id = req.params.id
-    console.log(id)
-    Blog.findById(id)
-        .then((result)=>{
-            console.log(result)
-            res.render('details',{blog:result,title:'Blog Details'})
-        })
-        .catch((err)=>{
-            console.log(error)
-        })
-})
-
-app.post('/blogs',(req,res)=>{
-    //console.log(req.body);
-    const blog = new Blog(req.body)
-    blog.save()
-        .then((result)=>{
-            res.redirect('/blogs')
-        })
-        .catch((error)=>{
-            console.log(error) 
-        })
-})
-
-
-app.get('/about',(req,res)=>{
-    const about =[
-        {description:"Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum."},
-    ]
-    res.render('about',{title:'about',about})
-})
-
-
+        
 app.get('/about-us',(req,res)=>{
     res.redirect('/about',{title:'about'})
 })
-// app.get('/add-blog',(req,res)=>{
-//     const blog = new Blog({
-//         title:'My Blog',
-//         snippet:'This is my new Blog',
-//         body:'The Blog is Awesome !'
-//     })
-//     blog.save()
-//         .then((result)=>{
-//             res.send(result)
-//         })
-//         .catch((error)=>{
-//             console.log(error)
-//         })
-// })
+        
 
-// app.get('/single-blog',(req,res)=>{
-//     Blog.findById('62f6337073422de2b6b226c4')
-//         .then((result)=>{
-//             res.send(result)
-//         })
-//         .catch((err)=>{
-//             console.log(err)
-//         })
-// })
+app.use('/blogs',blogRoutes);
 
-
-// app.get('/all-blogs',(req,res)=>{
-//     Blog.find()
-//         .then((result)=>{
-//             res.send(result)
-//         })
-//         .catch((error)=>{
-//             console.log(error)
-//         })
-// })
-
-// this is a middleware ! 
 app.use((req,res)=>{
     res.status(404).render('404',{title:'404 Error Loading Page'});
 })
