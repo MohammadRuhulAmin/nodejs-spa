@@ -3,12 +3,21 @@ const Blog = require('../models/blog')
 const blog_index = (req,res)=>{
     Blog.find()
     .then((result)=>{
-        res.render('index',{title:'All Blogs',blogs:result})
+        res.render('Blog/index',{title:'All Blogs',blogs:result})
     })
     .catch((error)=>{
         console.log(error)
     })
 }
+
+const blog_create = (req,res)=>{
+    console.log(res)
+    res.render('Blog/create',{title:"Create"});
+    // res.render('Blog/create',{title:'Create'})
+        // .then((result)=>console.log(result))
+        // .catch((err)=>console.log(error)) 
+}
+
 
 const blog_details = (req,res)=>{
     const id = req.params.id
@@ -16,7 +25,7 @@ const blog_details = (req,res)=>{
     Blog.findById(id)
         .then((result)=>{
             console.log(result)
-            res.render('details',{blog:result,title:'Blog Details'})
+            res.render('Blog/details',{blog:result,title:'Blog Details'})
         })
         .catch((err)=>{
             console.log(error)
@@ -52,4 +61,5 @@ module.exports = {
     blog_details,
     blog_delete,
     blog_post,
+    blog_create,
 }

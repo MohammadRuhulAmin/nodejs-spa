@@ -5,9 +5,7 @@ const router = express.Router()
 
 const BlogController = require('../controllers/BlogControllers')
 const Blog = require('../models/blog')
-router.get('/create',(req,res)=>{
-    res.render('create',{title:'create'})
-})
+
 
 //app.use(morgan('dev'));
 // app.use((req,res,next)=>{
@@ -23,11 +21,16 @@ router.get('/create',(req,res)=>{
 //     next()
 // })
 
+// router.get('/create',(req,res)=>{
+//     res.render('Blog/create',{title:'Create'})
+// })
 
+router.get('/create',BlogController.blog_create);
 router.get('/',BlogController.blog_index);
 router.get('/:id',BlogController.blog_details);
 router.delete('/:id',BlogController.blog_delete);
 router.post('/',BlogController.blog_post);
+
 
 // app.get('/add-blog',(req,res)=>{
 //     const blog = new Blog({
