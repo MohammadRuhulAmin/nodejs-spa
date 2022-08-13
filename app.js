@@ -2,8 +2,7 @@ const express = require('express')
 const morgan = require('morgan')
 const mongoose = require('mongoose')
 const blogRoutes  = require('./routes/blogRoutes')
-
-
+const BlogControllers = require('./controllers/BlogControllers')
 const app = express();
 const port = 3000;
 app.use(express.static('public')) // it will give the permission to use a folder //
@@ -41,7 +40,6 @@ app.get('/',(req,res)=>{
     res.redirect('/blogs')
 })
 
-        
 app.get('/about-us',(req,res)=>{
     res.redirect('/about',{title:'about'})
 })
